@@ -116,7 +116,7 @@ public class MainConsole extends ActionConsole {
 	 */
 	
 	private static void handleNewLien() {
-		if(g.nbNoeuds() > 1) {
+		if(g.nbNoeuds() > 0) {
 			ecrire_console("Nom du premier noeud:");
 			String vois1 = recupere_string();
 			ecrire_console("Nom du deuxieme noeud:");

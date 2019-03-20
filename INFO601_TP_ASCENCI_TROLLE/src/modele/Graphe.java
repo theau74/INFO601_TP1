@@ -227,7 +227,7 @@ public class Graphe {
 	public boolean lienExiste() {
 		boolean existe = false;
 		int i = 0;
-		while(i<getNoeuds().size()) {
+		while(i<getNoeuds().size() && !existe) {
 			if(getNoeuds().get(i).degre() > 0) {
 				existe = true;
 			}
