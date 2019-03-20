@@ -137,11 +137,11 @@ public class Graphe {
 			int n = getNoeuds().get(pos).degre();
 			/* on supprime toutes les relations liees a ce noeud */
 			for(int i=0; i<n; i++) {
-				removeLien(nomNoeud, getNoeuds().get(i).getVoisins().get(i).getNom());
+				removeLien(nomNoeud, getNoeuds().get(pos).getVoisins().get(0).getNom()); // 0 => ArrayList supprime au fur et à mesure
 			}
 			
 			/* on supprime le noeud */
-			//getNoeuds().remove(pos);
+			getNoeuds().remove(pos);
 		}
 		return pos != -1;
 	}
@@ -201,6 +201,8 @@ public class Graphe {
 		int posVois2 = noeudExiste(vois2);
 		
 		boolean okay = posVois1 != -1 && posVois2 != -1 && getNoeuds().get(posVois1).hasForNeighbour(getNoeuds().get(posVois2));
+		
+		System.out.println("(" + vois1 + ", " + vois2 + "): " + okay);
 		
 		if(okay) {
 			getNoeuds().get(posVois1).removeVoisin(getNoeuds().get(posVois2));
