@@ -147,7 +147,7 @@ public class MainConsole extends ActionConsole {
 	 */
 	
 	private static void handleRemoveLien() {
-		if(g.nbLiens() > 0) {
+		if(g.lienExiste()) {
 			ecrire_console("Nom du premier noeud:");
 			String vois1 = recupere_string();
 			ecrire_console("Nom du deuxieme noeud:");

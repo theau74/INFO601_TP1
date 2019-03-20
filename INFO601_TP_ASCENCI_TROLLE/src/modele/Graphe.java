@@ -134,6 +134,12 @@ public class Graphe {
 	public boolean removeNoeud(String nomNoeud) {
 		int pos = noeudExiste(nomNoeud);
 		if (pos != -1) {
+			/* on supprime toutes les relations liees a ce noeud */
+			for(int i=0; i<getNoeuds().get(pos).degre(); i++) {
+				removeLien(nomNoeud, getNoeuds().get(i).getNom());
+			}
+			
+			/* on supprime le noeud */
 			getNoeuds().remove(pos);
 		}
 		return pos != -1;
@@ -167,9 +173,13 @@ public class Graphe {
 		boolean okay = posVois1 != -1 && posVois2 != -1;
 		
 		if(okay) {
-			getNoeuds().get(posVois1).addVoisin(getNoeuds().get(posVois2));
-			getNoeuds().get(posVois2).addVoisin(getNoeuds().get(posVois1));
-		}
+            getNoeuds().get(posVois1).addVoisin(getNoeuds().get(posVois2));
+            
+            /* gérer le cas où un noeud s'ajoute lui-même en voisin */
+            if (!getNoeuds().get(posVois1).getNom().equals(getNoeuds().get(posVois2).getNom())) {
+                getNoeuds().get(posVois2).addVoisin(getNoeuds().get(posVois1));
+            }
+        }
 		
 		return okay;
 	}
@@ -193,7 +203,11 @@ public class Graphe {
 		
 		if(okay) {
 			getNoeuds().get(posVois1).removeVoisin(getNoeuds().get(posVois2));
-			getNoeuds().get(posVois2).removeVoisin(getNoeuds().get(posVois1));
+			
+			/* gérer le cas où un noeud s'ajoute lui-même en voisin */
+            if (!getNoeuds().get(posVois1).getNom().equals(getNoeuds().get(posVois2).getNom())) {
+            	getNoeuds().get(posVois2).removeVoisin(getNoeuds().get(posVois1));
+            }
 		}
 		
 		return okay;
@@ -201,16 +215,21 @@ public class Graphe {
 	
 	/*
 	 * 
-	 * Retourne le nombre de liens existants dans le graphe.
+	 * Vérifie s'il existe un lien dans le graphe.
+	 * 
+	 * Retourne un booléen.
 	 * 
 	 */
 	
-	public int nbLiens() {
-		int nb = 0;
-		for(int i=0; i < getNoeuds().size(); i++) {
-			nb += getNoeuds().get(i).degre();
+	public boolean lienExiste() {
+		boolean existe = false;
+		int i = 0;
+		while(i<getNoeuds().size()) {
+			if(getNoeuds().get(i).degre() > 0) {
+				existe = true;
+			}
 		}
-		return nb/2;
+		return existe;
 	}
 	
 	/*
