@@ -92,8 +92,8 @@ public class Noeud {
 	 * 
 	 */
 	
-	public boolean addVoisin(Noeud pred) {
-		return this.voisins.add(pred);
+	public boolean addVoisin(Noeud vois) {
+		return getVoisins().add(vois);
 	}
 	
 	/*
@@ -106,8 +106,39 @@ public class Noeud {
 	 * 
 	 */
 	
-	public boolean removeVoisin(Noeud pred) {
-		return this.voisins.remove(pred);
+	public boolean removeVoisin(Noeud vois) {
+		return getVoisins().remove(vois);
+	}
+	
+	/*
+	 * 
+	 * Vérifie si un noeud a pour voisin un noeud donné.
+	 * 
+	 * Retourne un booléen.
+	 * 
+	 */
+	
+	public boolean hasForNeighbour(Noeud noeud) {
+		boolean trouve = false;
+		int i = 0;
+		while(i < getVoisins().size() && !trouve) {
+			trouve = getVoisins().get(i).equals(noeud);
+			i++;
+		}
+		
+		return trouve;
+	}
+	
+	/*
+	 * 
+	 * Retourne le degré d'un noeud.
+	 * 
+	 * Retourne un entier.
+	 * 
+	 */
+	
+	public int degre() {
+		return getVoisins().size();
 	}
 	
 }

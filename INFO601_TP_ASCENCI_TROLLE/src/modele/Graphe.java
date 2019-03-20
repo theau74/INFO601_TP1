@@ -189,7 +189,7 @@ public class Graphe {
 		int posVois1 = noeudExiste(vois1);
 		int posVois2 = noeudExiste(vois2);
 		
-		boolean okay = posVois1 != -1 && posVois2 != -1;
+		boolean okay = posVois1 != -1 && posVois2 != -1 && getNoeuds().get(posVois1).hasForNeighbour(getNoeuds().get(posVois2));
 		
 		if(okay) {
 			getNoeuds().get(posVois1).removeVoisin(getNoeuds().get(posVois2));
@@ -208,7 +208,7 @@ public class Graphe {
 	public int nbLiens() {
 		int nb = 0;
 		for(int i=0; i < getNoeuds().size(); i++) {
-			nb += getNoeuds().get(i).getVoisins().size(); // améliorable si on connaît degrés de Noeud
+			nb += getNoeuds().get(i).degre();
 		}
 		return nb/2;
 	}
@@ -228,10 +228,10 @@ public class Graphe {
 		for(int i=0; i < getNoeuds().size(); i++) {
 			s += "(" + getNoeuds().get(i).getNom() + "):\n";
 			
-			int nbSucc = getNoeuds().get(i).getVoisins().size();
-			if(nbSucc > 0) {
+			int nbVois = getNoeuds().get(i).degre();
+			if(nbVois > 0) {
 				s += "voisins => (";
-				for(int j=0; j < nbSucc; j++) {
+				for(int j=0; j < nbVois; j++) {
 					s += "(" + getNoeuds().get(i).getVoisins().get(j).getNom() + ")";
 				}
 				s += ")\n";
