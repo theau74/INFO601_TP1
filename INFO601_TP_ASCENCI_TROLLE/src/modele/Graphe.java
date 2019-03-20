@@ -134,13 +134,14 @@ public class Graphe {
 	public boolean removeNoeud(String nomNoeud) {
 		int pos = noeudExiste(nomNoeud);
 		if (pos != -1) {
+			int n = getNoeuds().get(pos).degre();
 			/* on supprime toutes les relations liees a ce noeud */
-			for(int i=0; i<getNoeuds().get(pos).degre(); i++) {
-				removeLien(nomNoeud, getNoeuds().get(i).getNom());
+			for(int i=0; i<n; i++) {
+				removeLien(nomNoeud, getNoeuds().get(i).getVoisins().get(i).getNom());
 			}
 			
 			/* on supprime le noeud */
-			getNoeuds().remove(pos);
+			//getNoeuds().remove(pos);
 		}
 		return pos != -1;
 	}
