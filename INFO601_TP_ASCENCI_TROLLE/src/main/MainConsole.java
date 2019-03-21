@@ -62,10 +62,11 @@ public class MainConsole extends ActionConsole {
 	
 	private static void displayMenu() {
 		ecrire_console("Commandes:");
-		ecrire_console("1 - Créer un nouveau noeud");
+		ecrire_console("1 - Creer un nouveau noeud");
 		ecrire_console("2 - Supprimer un noeud");
-		ecrire_console("3 - Créer un lien entre deux noeuds");
+		ecrire_console("3 - Creer un lien entre deux noeuds");
 		ecrire_console("4 - Supprimer un lien existant entre deux noeuds");
+		ecrire_console("5 - Verifier si un chemin existe entre deux noeuds");
 		ecrire_console(ConstantesBasiques.CONSOLE_SEPARATOR);
 	}
 	
@@ -170,6 +171,26 @@ public class MainConsole extends ActionConsole {
 	
 	/*
 	 * 
+	 * 
+	 * 
+	 */
+	
+	private static void handleCheminExiste() {
+		if(g.nbNoeuds() > 1) {
+			ecrire_console("Nom du premier noeud:");
+			String noeud1 = recupere_string();
+			ecrire_console("Nom du deuxieme noeud:");
+			String noeud2 = recupere_string();
+			
+			ecrire_console(g.cheminExiste(noeud1, noeud2)? "Il existe au moins un chemin entre les deux noeuds." : "Aucun chemin ne relie les deux noeuds.");
+		}
+		else {
+			ecrire_console("Il n'y a pas assez de noeuds crees.");
+		}
+	}
+	
+	/*
+	 * 
 	 * Récupère le choix de commande de l'utilisateur
 	 * et gère le cas à traiter.
 	 * 
@@ -180,8 +201,8 @@ public class MainConsole extends ActionConsole {
 		
 		int choix = recupere_int();
 		
-		while(!(choix >= 1 && choix <= 4)) {
-			ecrire_console("La commande saisie doit etre comprise entre 1 et 4.");
+		while(!(choix >= 1 && choix <= 5)) {
+			ecrire_console("La commande saisie doit etre comprise entre 1 et 5.");
 			choix = recupere_int();
 		}
 		
@@ -197,6 +218,9 @@ public class MainConsole extends ActionConsole {
 			break;
 		case 4:
 			handleRemoveLien();
+			break;
+		case 5:
+			handleCheminExiste();
 			break;
 		default:
 			ecrire_console("Erreur.");

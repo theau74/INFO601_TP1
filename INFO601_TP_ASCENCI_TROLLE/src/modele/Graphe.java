@@ -95,6 +95,71 @@ public class Graphe {
 		return trouve;
 	}
 	
+	/*
+	 * 
+	 * Retourne une liste contenant les noeuds qui
+	 * ne sont pas présents dans le tableau memoire.
+	 * 
+	 */
+	
+	private ArrayList<Noeud> filterMem(ArrayList<Noeud> memoire, ArrayList<Noeud> listeNoeuds) {
+		ArrayList<Noeud> nouveau = new ArrayList<Noeud>();
+		
+		for(int i=0; i<listeNoeuds.size(); i++) {
+			
+			/* si le noeud n'est pas dans la mémoire */
+			if(!memoire.contains(listeNoeuds.get(i))) {
+				nouveau.add(listeNoeuds.get(i));
+			}
+			
+		}
+		
+		return nouveau;
+	}
+	
+	/*
+	 * 
+	 * Vérifie s'il existe un chemin entre deux noeuds donnés.
+	 * - memoire: tableau mémorisant les noeuds parcourus
+	 * 
+	 * Retourne un booléen.
+	 * 
+	 * Appelée par cheminExiste.
+	 * 
+	 */
+	
+	private boolean cheminExisteRec(Noeud noeudActuel, Noeud noeudCherche, ArrayList<Noeud> memoire) {
+		/* le noeud cherché a été trouvé */
+		if(noeudActuel == noeudCherche) {
+			return true;
+		}
+		
+		else {
+			/* on récupère tous les voisins non explorés */
+			ArrayList<Noeud> voisNonExplores = filterMem(memoire, noeudActuel.getVoisins());
+			
+			/* on ajoute le noeud actuel à la mémoire */
+			memoire.add(noeudActuel);
+			
+			/* si aucun voisin n'a pas encore été exploré */
+			if(voisNonExplores.size() == 0) {
+				return false;
+			}
+			
+			boolean trouve = false;
+			
+			/* on accède à tous les voisins non explorés */
+			int i = 0;
+			while(i < voisNonExplores.size() && !trouve) {
+				trouve = cheminExisteRec(voisNonExplores.get(i), noeudCherche, memoire);
+				
+				i++;
+			}
+			
+			return trouve;
+		}
+	}
+	
 	/**********************************************************
 	 * 
 	 * Méthodes publiques:
@@ -233,6 +298,18 @@ public class Graphe {
 			}
 		}
 		return existe;
+	}
+	
+	/*
+	 * 
+	 * Vérifie si un chemin existe entre deux noeuds.
+	 * 
+	 * Retourne un booléen.
+	 * 
+	 */
+	
+	public boolean cheminExiste(String noeudActuel, String noeudCherche) {
+		return cheminExisteRec(getNoeuds().get(noeudExiste(noeudActuel)), getNoeuds().get(noeudExiste(noeudCherche)), new ArrayList<Noeud>());
 	}
 	
 	/*
