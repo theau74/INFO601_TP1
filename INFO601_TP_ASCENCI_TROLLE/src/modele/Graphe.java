@@ -1,6 +1,7 @@
 package modele;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import constantes.ConstantesBasiques;
 
@@ -93,6 +94,90 @@ public class Graphe {
 			i++;
 		}
 		return trouve;
+	}
+	
+	/*
+	 * 
+	 * Retourne une liste contenant les noeuds qui
+	 * ne sont pas présents dans le tableau memoire.
+	 * 
+	 */
+	
+	private ArrayList<Noeud> filterMem(ArrayList<Noeud> memoire, ArrayList<Noeud> listeNoeuds) {
+		ArrayList<Noeud> nouveau = new ArrayList<Noeud>();
+		
+		for(int i=0; i<listeNoeuds.size(); i++) {
+			
+			/* si le noeud n'est pas dans la mémoire */
+			if(!memoire.contains(listeNoeuds.get(i))) {
+				nouveau.add(listeNoeuds.get(i));
+			}
+			
+		}
+		
+		return nouveau;
+	}
+	
+	/*
+	 * 
+	 * Retourne le premier chemin élémentaire trouvé entre 2 noeuds donnés.
+	 * 
+	 * - memoire: sauvegarde des noeuds explorés
+	 * - chemin: le chemin stocké
+	 * 
+	 * Retourne une liste de noms de noeuds.
+	 * - Vide si aucun chemin trouvé.
+	 * 
+	 */
+	
+	private ArrayList<String> cheminRec(Noeud noeudActuel, Noeud noeudCherche, ArrayList<Noeud> memoire, ArrayList<String> chemin) {
+		
+		/* le noeud cherché a été trouvé */
+		if(noeudActuel == noeudCherche) {
+			
+			/* on ajoute le noeud actuel au chemin */
+			chemin.add(noeudActuel.getNom());
+			
+			return chemin;
+		}
+		
+		/* on n'a pas encore trouvé le noeud cherché */
+		else {
+			/* on ajoute le noeud actuel à la mémoire */
+			memoire.add(noeudActuel);
+			
+			/* on récupère tous les voisins non explorés */
+			ArrayList<Noeud> voisNonExplores = filterMem(memoire, noeudActuel.getVoisins());
+			
+			/* s'il y a au moins un voisin non exploré */
+			if(voisNonExplores.size() != 0) {
+				boolean trouve = false;
+				
+				/* on accède à tous les voisins non explorés */
+				int i = 0;
+				while(i < voisNonExplores.size() && !trouve) {
+					/* on met à jour le chemin */
+					chemin = cheminRec(voisNonExplores.get(i), noeudCherche, memoire, chemin);
+					
+					trouve = chemin.size() != 0;
+					i++;
+				}
+				/* si le noeud cherché a été trouvé */
+				if(trouve) {
+					/* on ajoute le noeud actuel au chemin obtenu */
+					chemin.add(0, noeudActuel.getNom());
+					
+					return chemin;
+				}
+				else {
+					return new ArrayList<String>();
+				}
+			}
+			/* s'il n'y a aucun voisin non exploré */
+			else {
+				return new ArrayList<String>();
+			}
+		}
 	}
 	
 	/**********************************************************
@@ -233,6 +318,30 @@ public class Graphe {
 			}
 		}
 		return existe;
+	}
+	
+	/*
+	 * 
+	 * Vérifie si un chemin existe entre deux noeuds.
+	 * 
+	 * Retourne une liste de chaines de caractères, noms des noeuds.
+	 * 
+	 */
+	
+	public ArrayList<String> chemin(String noeudActuel, String noeudCherche) {
+		return cheminRec(getNoeuds().get(noeudExiste(noeudActuel)), getNoeuds().get(noeudExiste(noeudCherche)), new ArrayList<Noeud>(), new ArrayList<String>());
+	}
+	
+	/*
+	 * 
+	 * Vérifie si un chemin existe entre deux noeuds donnés.
+	 * 
+	 * Retourne un booléen.
+	 * 
+	 */
+	
+	public boolean cheminExiste(String noeudActuel, String noeudCherche) {
+		return chemin(noeudActuel, noeudCherche).size() > 0;
 	}
 	
 	/*

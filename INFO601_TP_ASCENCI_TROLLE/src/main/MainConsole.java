@@ -11,6 +11,37 @@ import modele.Graphe;
  * Interface sur console.
  * L'utilisateur peut manipuler un graphe orienté.
  * 
+ * IDEE:
+ * Modifier algorithme cheminExiste pour retourner une liste
+ * de Noeud (tous les chemins?) représentant un chemin (pas
+ * forcément élémentaire).
+ * -> classe Chemin?
+ * méthode cheminExiste appelle cet algorithme pour retourner
+ * vrai si taille du retour > 0
+ * 
+ * Démonstration lemme de König.
+ * Pour un chemin donné, retourne un chemin élémentaire.
+ * 
+ * IDEE: 
+ * Sauvegarde des graphes créés dans fichiers.
+ * Un fichier par graphe + un fichier json sauvegardant
+ * le nom de chaque graphe.
+ * Le nom d'un graphe est unique.
+ * On peut récupérer un graphe sauvegardé.
+ * 
+ * IDEE:
+ * Différencier graphe orienté/non orienté.
+ * => configGraphe s'en occupe.
+ * 
+ * IDEE:
+ * Pouvoir créer plusieurs noeuds à la fois.
+ * 
+ * IDEE:
+ * Créer des classes Exceptions pour optimiser code.
+ * 
+ * IDEE:
+ * Interface graphique (à faire en dernier lieu)
+ * 
  *********************************************************/
 
 public class MainConsole extends ActionConsole {
@@ -41,6 +72,8 @@ public class MainConsole extends ActionConsole {
 	private static void configGraphe() {
 		ecrire_console(ConstantesBasiques.CONSOLE_SEPARATOR);
 		ecrire_console("Nom du graphe: ");
+		
+		/* à modifier pour choix entre graphe orienté/non orienté */
 		g = new Graphe(recupere_string());
 	}
 	
@@ -62,10 +95,11 @@ public class MainConsole extends ActionConsole {
 	
 	private static void displayMenu() {
 		ecrire_console("Commandes:");
-		ecrire_console("1 - Créer un nouveau noeud");
+		ecrire_console("1 - Creer un nouveau noeud");
 		ecrire_console("2 - Supprimer un noeud");
-		ecrire_console("3 - Créer un lien entre deux noeuds");
+		ecrire_console("3 - Creer un lien entre deux noeuds");
 		ecrire_console("4 - Supprimer un lien existant entre deux noeuds");
+		ecrire_console("5 - Verifier si un chemin existe entre deux noeuds");
 		ecrire_console(ConstantesBasiques.CONSOLE_SEPARATOR);
 	}
 	
@@ -170,6 +204,33 @@ public class MainConsole extends ActionConsole {
 	
 	/*
 	 * 
+	 * 
+	 * 
+	 */
+	
+	private static void handleChemin() {
+		if(g.nbNoeuds() > 1) {
+			ecrire_console("Nom du premier noeud:");
+			String noeud1 = recupere_string();
+			ecrire_console("Nom du deuxieme noeud:");
+			String noeud2 = recupere_string();
+			
+			if(g.cheminExiste(noeud1, noeud2)) {
+				ecrire_console("Il existe au moins un chemin entre les deux noeuds.");
+				ecrire_console("Un exemple de chemin:");
+				ecrire_console(g.chemin(noeud1, noeud2).toString());
+			}
+			else {
+				ecrire_console("Aucun chemin ne relie les deux noeuds.");
+			}
+		}
+		else {
+			ecrire_console("Il n'y a pas assez de noeuds crees.");
+		}
+	}
+	
+	/*
+	 * 
 	 * Récupère le choix de commande de l'utilisateur
 	 * et gère le cas à traiter.
 	 * 
@@ -180,8 +241,8 @@ public class MainConsole extends ActionConsole {
 		
 		int choix = recupere_int();
 		
-		while(!(choix >= 1 && choix <= 4)) {
-			ecrire_console("La commande saisie doit etre comprise entre 1 et 4.");
+		while(!(choix >= 1 && choix <= 5)) {
+			ecrire_console("La commande saisie doit etre comprise entre 1 et 5.");
 			choix = recupere_int();
 		}
 		
@@ -197,6 +258,9 @@ public class MainConsole extends ActionConsole {
 			break;
 		case 4:
 			handleRemoveLien();
+			break;
+		case 5:
+			handleChemin();
 			break;
 		default:
 			ecrire_console("Erreur.");
