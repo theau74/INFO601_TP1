@@ -380,19 +380,73 @@ public class Graphe {
 	
 	/*
 	 * 
-	 * Parcours du graphe en largeur.
+	 * Vérifie si le graphe est complet.
 	 * 
-	 * Retourne l'état du graphe, une chaine de caractères.
+	 * Retourne un booléen.
 	 * 
 	 */
 	
-	public ArrayList<String> stateInWidth(String noeudDepart) {
-		clearMemory();
-		ArrayList<String> result = new ArrayList<String>();
+	public boolean isFull() {
+		boolean isFull = true;
+		int sizeGraph = getNoeuds().size();
 		
+		int i = 0;
+		while(i<sizeGraph && isFull) {
+			/* vérifie si le nombre de voisins est égal au nombre de noeuds du graphe - 1 */
+			isFull = getNoeuds().get(i).getVoisins().size() == sizeGraph - 1;
+			i++;
+		}
 		
+		return isFull;
+	}
+	
+	/*
+	 * 
+	 * Calcule le nombre d'arêtes dans le graphe.
+	 * 
+	 * Retourne un entier.
+	 * 
+	 */
+	
+	public int nbAretes() {
+		int compt;
 		
-		return result;
+		int sizeGraph = getNoeuds().size();
+		
+		/* si c'est un graphe complet */
+		if(isFull()) {
+			compt = sizeGraph * (sizeGraph - 1) / 2;
+		}
+		else {
+			compt = 0;
+			
+			for(int i=0; i<sizeGraph; i++) {
+				compt += getNoeuds().get(i).getVoisins().size();
+			}
+		}
+		
+		return compt;
+	}
+	
+	/*
+	 * 
+	 * Vérifie si le graphe est connexe.
+	 * 
+	 * Retourne un booléen.
+	 * 
+	 */
+	
+	public boolean isConnected() {
+		boolean isConnected = true;
+		int sizeGraph = getNoeuds().size();
+		
+		int i = 0;
+		while(i<sizeGraph && isConnected) {
+			isConnected = getNoeuds().get(i).getVoisins().size() > 0;
+			i++;
+		}
+		
+		return isConnected;
 	}
 	
 	/*
