@@ -380,6 +380,23 @@ public class Graphe {
 	
 	/*
 	 * 
+	 * Parcours du graphe en largeur.
+	 * 
+	 * Retourne l'état du graphe, une chaine de caractères.
+	 * 
+	 */
+	
+	public ArrayList<String> stateInWidth(String noeudDepart) {
+		clearMemory();
+		ArrayList<String> result = new ArrayList<String>();
+		
+		
+		
+		return result;
+	}
+	
+	/*
+	 * 
 	 * Retourne l'état du graphe.
 	 * 
 	 * Retourne une chaine de caractères.

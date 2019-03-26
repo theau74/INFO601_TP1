@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Noeud:
  * 
  * Représente un noeud d'un graphe.
- * Il possède des prédécesseurs et des successeurs
+ * Il possède des voisins.
  * qui sont eux-mêmes d'autres noeuds.
  * 
  *********************************************************/
@@ -18,8 +18,7 @@ public class Noeud {
 	 * 
 	 * Attributs du noeud:
 	 * - un nom
-	 * - une liste de prédécesseurs
-	 * - une liste de successeurs
+	 * - une liste de voisins
 	 * 
 	 *********************************************************/
 	
