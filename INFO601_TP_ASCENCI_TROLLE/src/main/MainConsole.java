@@ -11,14 +11,6 @@ import modele.Graphe;
  * Interface sur console.
  * L'utilisateur peut manipuler un graphe orienté.
  * 
- * IDEE:
- * Modifier algorithme cheminExiste pour retourner une liste
- * de Noeud (tous les chemins?) représentant un chemin (pas
- * forcément élémentaire).
- * -> classe Chemin?
- * méthode cheminExiste appelle cet algorithme pour retourner
- * vrai si taille du retour > 0
- * 
  * Démonstration lemme de König.
  * Pour un chemin donné, retourne un chemin élémentaire.
  * 

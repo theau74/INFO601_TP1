@@ -20,11 +20,13 @@ public class Graphe {
 	 * Attributs du graphe:
 	 * - un nom
 	 * - une liste de noeuds
+	 * - une mémoire
 	 * 
 	 *********************************************************/
 	
 	private String nom;
 	private ArrayList<Noeud> noeuds = new ArrayList<Noeud>();
+	private ArrayList<Noeud> memoire = new ArrayList<Noeud>();
 	
 	/**********************************************************
 	 * 
@@ -75,6 +77,40 @@ public class Graphe {
 	
 	/*
 	 * 
+	 * Récupère la mémoire.
+	 * 
+	 * Retourne une listez de noeuds.
+	 * 
+	 */
+	
+	private ArrayList<Noeud> getMemory() {
+		return this.memoire;
+	}
+	
+	/*
+	 * 
+	 * Ajoute un nouveau noeud à la mémoire.
+	 * 
+	 * Retourne un booléen.
+	 * 
+	 */
+	
+	private boolean addMemory(Noeud noeud) {
+		return getMemory().add(noeud);
+	}
+	
+	/*
+	 * 
+	 * Vide la mémoire.
+	 * 
+	 */
+	
+	private void clearMemory() {
+		getMemory().clear();
+	}
+	
+	/*
+	 * 
 	 * Vérifie s'il existe un noeud de nom donné.
 	 * 
 	 * - nomNoeud: Le nom cherché.
@@ -102,13 +138,13 @@ public class Graphe {
 	 * 
 	 */
 	
-	private ArrayList<Noeud> filterMem(ArrayList<Noeud> memoire, ArrayList<Noeud> listeNoeuds) {
+	private ArrayList<Noeud> filterMem(ArrayList<Noeud> listeNoeuds) {
 		ArrayList<Noeud> nouveau = new ArrayList<Noeud>();
 		
 		for(int i=0; i<listeNoeuds.size(); i++) {
 			
 			/* si le noeud n'est pas dans la mémoire */
-			if(!memoire.contains(listeNoeuds.get(i))) {
+			if(!getMemory().contains(listeNoeuds.get(i))) {
 				nouveau.add(listeNoeuds.get(i));
 			}
 			
@@ -129,7 +165,7 @@ public class Graphe {
 	 * 
 	 */
 	
-	private ArrayList<String> cheminRec(Noeud noeudActuel, Noeud noeudCherche, ArrayList<Noeud> memoire, ArrayList<String> chemin) {
+	private ArrayList<String> cheminRec(Noeud noeudActuel, Noeud noeudCherche, ArrayList<String> chemin) {
 		
 		/* le noeud cherché a été trouvé */
 		if(noeudActuel == noeudCherche) {
@@ -143,10 +179,10 @@ public class Graphe {
 		/* on n'a pas encore trouvé le noeud cherché */
 		else {
 			/* on ajoute le noeud actuel à la mémoire */
-			memoire.add(noeudActuel);
+			addMemory(noeudActuel);
 			
 			/* on récupère tous les voisins non explorés */
-			ArrayList<Noeud> voisNonExplores = filterMem(memoire, noeudActuel.getVoisins());
+			ArrayList<Noeud> voisNonExplores = filterMem(noeudActuel.getVoisins());
 			
 			/* s'il y a au moins un voisin non exploré */
 			if(voisNonExplores.size() != 0) {
@@ -156,7 +192,7 @@ public class Graphe {
 				int i = 0;
 				while(i < voisNonExplores.size() && !trouve) {
 					/* on met à jour le chemin */
-					chemin = cheminRec(voisNonExplores.get(i), noeudCherche, memoire, chemin);
+					chemin = cheminRec(voisNonExplores.get(i), noeudCherche, chemin);
 					
 					trouve = chemin.size() != 0;
 					i++;
@@ -286,8 +322,6 @@ public class Graphe {
 		
 		boolean okay = posVois1 != -1 && posVois2 != -1 && getNoeuds().get(posVois1).hasForNeighbour(getNoeuds().get(posVois2));
 		
-		System.out.println("(" + vois1 + ", " + vois2 + "): " + okay);
-		
 		if(okay) {
 			getNoeuds().get(posVois1).removeVoisin(getNoeuds().get(posVois2));
 			
@@ -328,7 +362,8 @@ public class Graphe {
 	 */
 	
 	public ArrayList<String> chemin(String noeudActuel, String noeudCherche) {
-		return cheminRec(getNoeuds().get(noeudExiste(noeudActuel)), getNoeuds().get(noeudExiste(noeudCherche)), new ArrayList<Noeud>(), new ArrayList<String>());
+		clearMemory();
+		return cheminRec(getNoeuds().get(noeudExiste(noeudActuel)), getNoeuds().get(noeudExiste(noeudCherche)), new ArrayList<String>());
 	}
 	
 	/*
